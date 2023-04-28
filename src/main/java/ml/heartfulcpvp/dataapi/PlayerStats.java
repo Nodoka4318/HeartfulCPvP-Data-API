@@ -4,6 +4,7 @@ import ch.njol.skript.Skript;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import ml.heartfulcpvp.dataapi.exceptions.InvalidConfigException;
 import ml.heartfulcpvp.dataapi.exceptions.MinecraftPlayerNotFoundException;
 
 import java.io.BufferedReader;
@@ -12,6 +13,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.logging.Logger;
 
 public class PlayerStats {
     @SerializedName("playerName")
@@ -34,7 +36,17 @@ public class PlayerStats {
     @Expose
     private int playerKits;
 
+    private Config config;
+    private static Logger logger = LoggingUtils.getLogger();
+
     public PlayerStats(String playerName) throws MinecraftPlayerNotFoundException, IOException {
+        try {
+            config = Config.getConfig();
+        } catch (InvalidConfigException ex) {
+            logger.warning(ex.getMessage());
+            config = Config.getDefaultConfig();
+        }
+
         this.playerName = playerName;
         this.playerUuid = getMinecraftPlayerUuid(playerName);
 
@@ -90,7 +102,7 @@ public class PlayerStats {
 
     private void setPlayerDeaths() {
         var deaths = 0;
-        var skflag = "{" + this.playerUuid + "::deaths}";
+        var skflag = config.getPlayerDeathsVar().replace("${player}", this.playerUuid);
         var skvar = SkriptUtils.getVar(skflag);
 
         if (skvar != null) {
@@ -102,7 +114,7 @@ public class PlayerStats {
 
     private void setPlayerKills() {
         var kills = 0;
-        var skflag = "{" + this.playerUuid + "::kills}";
+        var skflag = config.getPlayerKillsVar().replace("${player}", this.playerUuid);
         var skvar = SkriptUtils.getVar(skflag);
 
         if (skvar != null) {
@@ -114,10 +126,11 @@ public class PlayerStats {
 
     private void setPlayerKits() {
         var kits = 0;
-        var skflagBase = "{userkit::name::" + this.playerName + "::"; // + "${index}}"
+        var skflagBase = config.getPlayerKitNameVar().replace("${player}", this.playerName);
 
         for (int i = 1; true; i++) {
-            var skvar = SkriptUtils.getVar(skflagBase + i + "}");
+            var skflag = skflagBase.replace("${index}", i + "");
+            var skvar = SkriptUtils.getVar(skflag);
 
             if (skvar != null)
                 kits++;
