@@ -15,8 +15,8 @@ import java.nio.file.OpenOption;
 import java.nio.file.StandardOpenOption;
 
 public class Config {
-    private static final String CONFIG_DIRECTORY_PATH = "./HeartfulCPvP/DataApi";
-    private static final String CONFIG_FILE_PATH = "./HeartfulCPvP/DataApi/config.json";
+    private static final String CONFIG_DIRECTORY_PATH = "./plugins/HeartfulCPvP/DataApi";
+    private static final String CONFIG_FILE_PATH = "./plugins/HeartfulCPvP/DataApi/config.json";
     public static final int DEFAULT_PORT = 8080;
     public static final String DEFAULT_CONTENT_PATH = "/playerdata/";
     public static final String DEFAULT_PLAYER_DEATHS_VAR = "{${player}::hoge}"; // dummy
@@ -109,8 +109,13 @@ public class Config {
         return file.exists();
     }
 
-    public static Config loadConfigFile() {
-        return null; // TODO:
+    public static Config loadConfigFile() throws IOException {
+        var file = new File(CONFIG_FILE_PATH);
+        var content = Files.readString(file.toPath());
+        var gson = new Gson();
+        var conf = gson.fromJson(content, Config.class);
+
+        return conf;
     }
 
     public static boolean isConfigSet() {

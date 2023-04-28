@@ -19,9 +19,16 @@ public class Plugin extends JavaPlugin {
         logger.info("コンフィグの設定をしています。");
 
         if (Config.isConfigExists()) {
-            var conf = Config.loadConfigFile();
-            Config.setConfig(conf);
-            logger.info("コンフィグファイルが読み込まれました。");
+            try {
+                var conf = Config.loadConfigFile();
+                Config.setConfig(conf);
+                logger.info("コンフィグファイルが読み込まれました。");
+            } catch (IOException ex) {
+                logger.warning("コンフィグファイルの読み込みに失敗しました。\nプラグインを停止します。");
+                Bukkit.getPluginManager().disablePlugin(this);
+
+                ex.printStackTrace();
+            }
         } else {
             var newConf = Config.getDefaultConfig();
 

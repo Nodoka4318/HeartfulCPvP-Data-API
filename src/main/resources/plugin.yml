@@ -1,6 +1,6 @@
 name: HeartfulCPvP-Data-API # the plugins name as it should appear in the plugin list /pl
 version: 1.0 # the plugin's version
 author: Nodoka4318
-main: ml.heartfulcpvp.dataapi.PluginMain
+main: ml.heartfulcpvp.dataapi.Plugin
 api-version:
 depend: [HeartfulCPvP, Skript]
