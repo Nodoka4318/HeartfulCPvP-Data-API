@@ -166,9 +166,9 @@ public class PlayerStats {
             return 1; // スコア0以下はレベル１
         }
 
-        for (int i = 1; true; i++) {
-            var currentSc = 0d;
+        var currentSc = 0d;
 
+        for (int i = 1; true; i++) {
             if (i < 20) {
                 currentSc = (5 * Math.pow(1.2, i) - 1);
             } else if (i <= 40) {
