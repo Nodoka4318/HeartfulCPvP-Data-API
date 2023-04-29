@@ -170,7 +170,7 @@ public class PlayerStats {
 
         for (int i = 1; true; i++) {
             if (i < 20) {
-                currentSc = (5 * Math.pow(1.2, i) - 1);
+                currentSc = 5 * (Math.pow(1.2, i) - 1);
             } else if (i <= 40) {
                 currentSc += 35;
             } else if (i <= 60) {
