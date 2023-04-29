@@ -9,7 +9,6 @@ import javax.annotation.Nullable;
 public class SkriptUtils {
     @Nullable
     public static Object getVar(String varName){
-        LoggingUtils.Log(varName);
         return Variables.getVariable(varName, null, false);
     }
 
