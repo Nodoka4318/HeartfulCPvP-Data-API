@@ -34,6 +34,10 @@ public class PlayerStatsResponse {
     @Expose
     private boolean bePlayer;
 
+    @SerializedName("online")
+    @Expose
+    private boolean online;
+
     public PlayerStatsResponse(PlayerStats stats) {
         this.playerDeaths = stats.getPlayerDeaths();
         this.playerKills = stats.getPlayerKills();
@@ -42,6 +46,7 @@ public class PlayerStatsResponse {
         this.playerUuid = stats.getPlayerUuid();
         this.bePlayer = stats.isBePlayer();
         this.playerLevel = stats.calcPlayerLevel();
+        this.online = stats.isPlayerOnline();
     }
 
     public String export() {
