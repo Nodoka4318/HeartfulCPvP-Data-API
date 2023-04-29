@@ -1,10 +1,15 @@
 package ml.heartfulcpvp.dataapi;
 
+import ch.njol.skript.Skript;
 import ch.njol.skript.lang.function.Function;
 import ch.njol.skript.variables.Variables;
 
+import javax.annotation.Nullable;
+
 public class SkriptUtils {
+    @Nullable
     public static Object getVar(String varName){
+        LoggingUtils.Log(varName);
         return Variables.getVariable(varName, null, false);
     }
 

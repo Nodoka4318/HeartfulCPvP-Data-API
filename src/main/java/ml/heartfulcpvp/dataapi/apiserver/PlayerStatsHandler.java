@@ -2,6 +2,7 @@ package ml.heartfulcpvp.dataapi.apiserver;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import ml.heartfulcpvp.dataapi.LoggingUtils;
 import ml.heartfulcpvp.dataapi.PlayerStats;
 import ml.heartfulcpvp.dataapi.exceptions.MinecraftPlayerNotFoundException;
 
@@ -12,15 +13,18 @@ public class PlayerStatsHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         var requestURI = exchange.getRequestURI().toString();
+        LoggingUtils.Log("Request accepted ; " + requestURI);
+
         var playerName = requestURI.substring(requestURI.lastIndexOf("/") + 1);
 
         exchange.getResponseHeaders().set("Content-Type", "application/json; charset=UTF-8");
 
-        String response = "";
+        String response = "{\"error\":\"unknown error occurred\"}";
 
         try {
             var playerStats = new PlayerStats(playerName);
-            response = playerStats.buildJson();
+            var statsm = new PlayerStatsResponse(playerStats);
+            response = statsm.export();
 
             exchange.sendResponseHeaders(200, response.getBytes().length);
         } catch (MinecraftPlayerNotFoundException e) {

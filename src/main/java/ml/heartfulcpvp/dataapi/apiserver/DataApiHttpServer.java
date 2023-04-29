@@ -11,9 +11,11 @@ import java.util.logging.Logger;
 
 public class DataApiHttpServer {
     private final String CONTEXT_PATH;
-    private static final Logger logger = LoggingUtils.getLogger();
+    private static Logger logger;
 
     public DataApiHttpServer() {
+        logger = LoggingUtils.getLogger();
+
         String path;
         try {
             path = Config.getConfig().getContentPath();

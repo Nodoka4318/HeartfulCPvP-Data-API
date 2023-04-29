@@ -6,6 +6,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import ml.heartfulcpvp.dataapi.exceptions.InvalidConfigException;
 import ml.heartfulcpvp.dataapi.exceptions.MinecraftPlayerNotFoundException;
+import org.bukkit.Bukkit;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,27 +14,17 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.Locale;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class PlayerStats {
-    @SerializedName("playerName")
-    @Expose
+    private static final String BE_PREFIX = "*"; // TODO: configに書いてもいいかも
+
     private String playerName;
-
-    @SerializedName("playerUuid")
-    @Expose
     private String playerUuid;
-
-    @SerializedName("playerDeaths")
-    @Expose
-    private int playerDeaths;
-
-    @SerializedName("playerKills")
-    @Expose
-    private int playerKills;
-
-    @SerializedName("playerKits")
-    @Expose
+    private long playerDeaths;
+    private long playerKills;
     private int playerKits;
 
     private Config config;
@@ -48,11 +39,15 @@ public class PlayerStats {
         }
 
         this.playerName = playerName;
-        this.playerUuid = getMinecraftPlayerUuid(playerName);
+
+        if (isBePlayer()) {
+            this.playerUuid = getPlayerUuidFromName(playerName);
+        } else {
+            this.playerUuid = getMinecraftPlayerUuid(playerName);
+        }
 
         setPlayerDeaths();
         setPlayerKills();
-
         setPlayerKits();
     }
 
@@ -64,16 +59,20 @@ public class PlayerStats {
         return playerUuid;
     }
 
-    public int getPlayerDeaths() {
+    public long getPlayerDeaths() {
         return playerDeaths;
     }
 
-    public int getPlayerKills() {
+    public long getPlayerKills() {
         return playerKills;
     }
 
     public int getPlayerKits() {
         return playerKits;
+    }
+
+    public boolean isBePlayer() {
+        return playerName.contains(BE_PREFIX);
     }
 
     private static String getMinecraftPlayerUuid(String playerName) throws IOException, MinecraftPlayerNotFoundException {
@@ -97,28 +96,44 @@ public class PlayerStats {
 
         var gson = new Gson();
         var profile = gson.fromJson(response.toString(), MinecraftProfile.class);
-        return profile.getId();
+        return formatUuidString(profile.getId());
+    }
+
+    public static String formatUuidString(String uuidString) {
+        StringBuilder sb = new StringBuilder(uuidString);
+        sb.insert(8, "-");
+        sb.insert(13, "-");
+        sb.insert(18, "-");
+        sb.insert(23, "-");
+        return sb.toString();
+    }
+
+    private static String getPlayerUuidFromName(String playerName) {
+        var player = Bukkit.getOfflinePlayer(playerName);
+        return player.getUniqueId().toString();
     }
 
     private void setPlayerDeaths() {
-        var deaths = 0;
-        var skflag = config.getPlayerDeathsVar().replace("${player}", this.playerUuid);
+        var deaths = 0l;
+        var skflag = config.getPlayerDeathsVar().replace("${player}", this.playerUuid.toLowerCase(Locale.ROOT));
+
         var skvar = SkriptUtils.getVar(skflag);
 
         if (skvar != null) {
-            deaths = (int) skvar;
+            deaths = (long) skvar;
         }
 
         this.playerDeaths = deaths;
     }
 
     private void setPlayerKills() {
-        var kills = 0;
-        var skflag = config.getPlayerKillsVar().replace("${player}", this.playerUuid);
+        var kills = 0l;
+        var skflag = config.getPlayerKillsVar().replace("${player}", this.playerUuid.toLowerCase(Locale.ROOT));
+
         var skvar = SkriptUtils.getVar(skflag);
 
         if (skvar != null) {
-            kills = (int) skvar;
+            kills = (long) skvar;
         }
 
         this.playerKills = kills;
@@ -126,7 +141,7 @@ public class PlayerStats {
 
     private void setPlayerKits() {
         var kits = 0;
-        var skflagBase = config.getPlayerKitNameVar().replace("${player}", this.playerName);
+        var skflagBase = config.getPlayerKitNameVar().replace("${player}", this.playerName.toLowerCase(Locale.ROOT));
 
         for (int i = 1; true; i++) {
             var skflag = skflagBase.replace("${index}", i + "");
@@ -168,10 +183,5 @@ public class PlayerStats {
                 return i;
             }
         }
-    }
-
-    public String buildJson() {
-        var gson = new Gson();
-        return gson.toJson(this);
     }
 }
