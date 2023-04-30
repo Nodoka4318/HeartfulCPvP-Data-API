@@ -186,6 +186,6 @@ public class PlayerStats {
     }
 
     public boolean isPlayerOnline() {
-        return Bukkit.getPlayer(playerUuid) != null;
+        return Bukkit.getPlayer(playerName) != null;
     }
 }

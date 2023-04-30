@@ -13,10 +13,10 @@ public class Config {
     private static final String CONFIG_DIRECTORY_PATH = "./plugins/HeartfulCPvP/DataApi";
     private static final String CONFIG_FILE_PATH = "./plugins/HeartfulCPvP/DataApi/config.json";
     public static final int DEFAULT_PORT = 8080;
-    public static final String DEFAULT_CONTENT_PATH = "/playerdata/";
-    public static final String DEFAULT_PLAYER_DEATHS_VAR = "{${player}::hoge}"; // dummy
-    public static final String DEFAULT_PLAYER_KILLS_VAR = "{${player}::hoge}";
-    public static final String DEFAULT_PLAYER_KIT_NAME_VAR = "{${player}::${index}::hoge}";
+    public static final String DEFAULT_CONTEXT_PATH = "/playerdata/";
+    public static final String DEFAULT_PLAYER_DEATHS_VAR = "${player}::hoge"; // dummy
+    public static final String DEFAULT_PLAYER_KILLS_VAR = "${player}::hoge";
+    public static final String DEFAULT_PLAYER_KIT_NAME_VAR = "${player}::${index}::hoge";
 
     private static Config config;
 
@@ -24,7 +24,7 @@ public class Config {
     @Expose
     private int port;
 
-    @SerializedName("contentPath")
+    @SerializedName("contextPath")
     @Expose
     private String contextPath;
 
@@ -121,7 +121,7 @@ public class Config {
         var conf = new Config();
 
         conf.setPort(DEFAULT_PORT);
-        conf.setContextPath(DEFAULT_CONTENT_PATH);
+        conf.setContextPath(DEFAULT_CONTEXT_PATH);
         conf.setPlayerDeathsVar(DEFAULT_PLAYER_DEATHS_VAR);
         conf.setPlayerKillsVar(DEFAULT_PLAYER_KILLS_VAR);
         conf.setPlayerKitNameVar(DEFAULT_PLAYER_KIT_NAME_VAR);
