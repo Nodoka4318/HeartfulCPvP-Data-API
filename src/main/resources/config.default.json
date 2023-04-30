@@ -1,1 +1,1 @@
-{"port":8080,"contentPath":"/playerdata/","playerDeathVar":"{${player}::deaths}","playerKillsVar":"{${player}::kills}","playerKitNameVar":"{userkit::name::${player}::${index}}"}
+{"port":8080,"contextPath":"/playerdata/","playerDeathVar":"{${player}::deaths}","playerKillsVar":"{${player}::kills}","playerKitNameVar":"{userkit::name::${player}::${index}}"}

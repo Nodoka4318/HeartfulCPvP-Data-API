@@ -3,16 +3,11 @@ package ml.heartfulcpvp.dataapi;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import jdk.jshell.spi.ExecutionControl;
 import ml.heartfulcpvp.dataapi.exceptions.InvalidConfigException;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InvalidObjectException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
-import java.nio.file.StandardOpenOption;
 
 public class Config {
     private static final String CONFIG_DIRECTORY_PATH = "./plugins/HeartfulCPvP/DataApi";
@@ -31,7 +26,7 @@ public class Config {
 
     @SerializedName("contentPath")
     @Expose
-    private String contentPath;
+    private String contextPath;
 
     @SerializedName("playerDeathVar")
     @Expose
@@ -49,8 +44,8 @@ public class Config {
         this.port = port;
     }
 
-    public void setContentPath(String contentPath) {
-        this.contentPath = contentPath;
+    public void setContextPath(String contextPath) {
+        this.contextPath = contextPath;
     }
 
     public void setPlayerDeathsVar(String playerDeathsVar) {
@@ -69,8 +64,8 @@ public class Config {
         return port;
     }
 
-    public String getContentPath() {
-        return contentPath;
+    public String getContextPath() {
+        return contextPath;
     }
 
     public String getPlayerDeathsVar() {
@@ -126,7 +121,7 @@ public class Config {
         var conf = new Config();
 
         conf.setPort(DEFAULT_PORT);
-        conf.setContentPath(DEFAULT_CONTENT_PATH);
+        conf.setContextPath(DEFAULT_CONTENT_PATH);
         conf.setPlayerDeathsVar(DEFAULT_PLAYER_DEATHS_VAR);
         conf.setPlayerKillsVar(DEFAULT_PLAYER_KILLS_VAR);
         conf.setPlayerKitNameVar(DEFAULT_PLAYER_KIT_NAME_VAR);

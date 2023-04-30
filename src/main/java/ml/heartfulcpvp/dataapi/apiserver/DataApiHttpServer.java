@@ -18,7 +18,7 @@ public class DataApiHttpServer {
 
         String path;
         try {
-            path = Config.getConfig().getContentPath();
+            path = Config.getConfig().getContextPath();
         } catch (InvalidConfigException ex) {
             logger.warning(ex.getMessage());
             path = Config.DEFAULT_CONTENT_PATH;
