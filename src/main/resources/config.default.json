@@ -1,1 +1,10 @@
-{"port":8080,"contextPath":"/playerdata/","playerDeathVar":"{${player}::deaths}","playerKillsVar":"{${player}::kills}","playerKitNameVar":"{userkit::name::${player}::${index}}"}
+{
+  "port":8080,
+  "playerDataContextPath":"/playerdata/",
+  "statusContextPath":"/status",
+  "playerDeathVar":"${player}::hoge",
+  "playerKillsVar":"${player}::fuga",
+  "playerKitNameVar":"${player}::${index}::piyo",
+  "isDuelingVar":"hogehoge::piyopiyo",
+  "bePrefix": "*BE_"
+}

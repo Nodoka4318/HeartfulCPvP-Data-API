@@ -13,10 +13,13 @@ public class Config {
     private static final String CONFIG_DIRECTORY_PATH = "./plugins/HeartfulCPvP/DataApi";
     private static final String CONFIG_FILE_PATH = "./plugins/HeartfulCPvP/DataApi/config.json";
     public static final int DEFAULT_PORT = 8080;
-    public static final String DEFAULT_CONTEXT_PATH = "/playerdata/";
+    public static final String DEFAULT_PLAYER_DATA_CONTEXT_PATH = "/playerdata/";
+    public static final String DEFAULT_STATUS_CONTEXT_PATH = "/status";
     public static final String DEFAULT_PLAYER_DEATHS_VAR = "${player}::hoge"; // dummy
-    public static final String DEFAULT_PLAYER_KILLS_VAR = "${player}::hoge";
-    public static final String DEFAULT_PLAYER_KIT_NAME_VAR = "${player}::${index}::hoge";
+    public static final String DEFAULT_PLAYER_KILLS_VAR = "${player}::fuga";
+    public static final String DEFAULT_PLAYER_KIT_NAME_VAR = "${player}::${index}::piyo";
+    public static final String DEFAULT_IS_DUELING_VAR = "hogehoge::piyopiyo";
+    public static final String DEFAULT_BE_PREFIX = "*BE_";
 
     private static Config config;
 
@@ -24,9 +27,13 @@ public class Config {
     @Expose
     private int port;
 
-    @SerializedName("contextPath")
+    @SerializedName("playerDataContextPath")
     @Expose
-    private String contextPath;
+    private String playerDataContextPath;
+
+    @SerializedName("statusContextPath")
+    @Expose
+    private String statusContextPath;
 
     @SerializedName("playerDeathVar")
     @Expose
@@ -40,12 +47,24 @@ public class Config {
     @Expose
     private String playerKitNameVar;
 
+    @SerializedName("isDuelingVar")
+    @Expose
+    private String isDuelingVar;
+
+    @SerializedName("bePrefix")
+    @Expose
+    private String bePrefix;
+
     public void setPort(int port) {
         this.port = port;
     }
 
-    public void setContextPath(String contextPath) {
-        this.contextPath = contextPath;
+    public void setPlayerDataContextPath(String playerDataContextPath) {
+        this.playerDataContextPath = playerDataContextPath;
+    }
+
+    public void setStatusContextPath(String statusContextPath) {
+        this.statusContextPath = statusContextPath;
     }
 
     public void setPlayerDeathsVar(String playerDeathsVar) {
@@ -60,12 +79,24 @@ public class Config {
         this.playerKitNameVar = playerKitNameVar;
     }
 
+    public void setIsDuelingVar(String isDuelingVar) {
+        this.isDuelingVar = isDuelingVar;
+    }
+
+    public void setBePrefix(String bePrefix) {
+        this.bePrefix = bePrefix;
+    }
+
     public int getPort() {
         return port;
     }
 
-    public String getContextPath() {
-        return contextPath;
+    public String getPlayerDataContextPath() {
+        return playerDataContextPath;
+    }
+
+    public String getStatusContextPath() {
+        return statusContextPath;
     }
 
     public String getPlayerDeathsVar() {
@@ -78,6 +109,14 @@ public class Config {
 
     public String getPlayerKitNameVar() {
         return playerKitNameVar;
+    }
+
+    public String getIsDuelingVar() {
+        return isDuelingVar;
+    }
+
+    public String getBePrefix() {
+        return bePrefix;
     }
 
     public void saveConfig() throws IOException {
@@ -121,10 +160,13 @@ public class Config {
         var conf = new Config();
 
         conf.setPort(DEFAULT_PORT);
-        conf.setContextPath(DEFAULT_CONTEXT_PATH);
+        conf.setPlayerDataContextPath(DEFAULT_PLAYER_DATA_CONTEXT_PATH);
+        conf.setStatusContextPath(DEFAULT_STATUS_CONTEXT_PATH);
         conf.setPlayerDeathsVar(DEFAULT_PLAYER_DEATHS_VAR);
         conf.setPlayerKillsVar(DEFAULT_PLAYER_KILLS_VAR);
         conf.setPlayerKitNameVar(DEFAULT_PLAYER_KIT_NAME_VAR);
+        conf.setIsDuelingVar(DEFAULT_IS_DUELING_VAR);
+        conf.setBePrefix(DEFAULT_BE_PREFIX);
 
         return conf;
     }

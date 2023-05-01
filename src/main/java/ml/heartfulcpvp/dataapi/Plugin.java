@@ -89,7 +89,7 @@ public class Plugin extends JavaPlugin {
 
     private void initHttpServer() {
         logger.info("Httpサーバを初期化します。");
-        server = new DataApiHttpServer();
+        server = new DataApiHttpServer(this);
         logger.info("Httpサーバを開始します。");
         int port;
 
