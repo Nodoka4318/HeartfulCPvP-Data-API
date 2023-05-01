@@ -19,7 +19,7 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 public class PlayerStats {
-    private static final String BE_PREFIX = "*"; // TODO: configに書いてもいいかも
+    // private static final String BE_PREFIX = "*";
 
     private String playerName;
     private String playerUuid;
@@ -28,9 +28,11 @@ public class PlayerStats {
     private int playerKits;
 
     private Config config;
-    private static Logger logger = LoggingUtils.getLogger();
+    private static Logger logger;
 
     public PlayerStats(String playerName) throws MinecraftPlayerNotFoundException, IOException {
+        logger = LoggingUtils.getLogger();
+
         try {
             config = Config.getConfig();
         } catch (InvalidConfigException ex) {
@@ -72,7 +74,7 @@ public class PlayerStats {
     }
 
     public boolean isBePlayer() {
-        return playerName.contains(BE_PREFIX);
+        return playerName.contains(config.getBePrefix());
     }
 
     private static String getMinecraftPlayerUuid(String playerName) throws IOException, MinecraftPlayerNotFoundException {

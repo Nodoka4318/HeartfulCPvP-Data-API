@@ -21,10 +21,13 @@ public class Plugin extends JavaPlugin {
     private DataApiHttpServer server;
 
     private static SimpleCommandMap commandMap;
+    private static Plugin instance;
 
     @Override
     public void onEnable() {
         logger = getLogger();
+        instance = this;
+
         setupSimpleCommandMap();
         LoggingUtils.setLogger(logger);
 
@@ -89,7 +92,7 @@ public class Plugin extends JavaPlugin {
 
     private void initHttpServer() {
         logger.info("Httpサーバを初期化します。");
-        server = new DataApiHttpServer(this);
+        server = new DataApiHttpServer();
         logger.info("Httpサーバを開始します。");
         int port;
 
@@ -131,7 +134,11 @@ public class Plugin extends JavaPlugin {
         return commandMap;
     }
 
-    protected void registerCommand(Command command) {
+    public void registerCommand(Command command) {
         Plugin.getCommandMap().register(command.getName(), command);
+    }
+
+    public static JavaPlugin getInstatnce() {
+        return instance;
     }
 }

@@ -14,11 +14,9 @@ public class DataApiHttpServer {
     private final String PLAYER_DATA_CONTEXT_PATH;
     private final String STATUS_CONTEXT_PATH;
     private static Logger logger;
-    private JavaPlugin plugin;
 
-    public DataApiHttpServer(JavaPlugin plugin) {
+    public DataApiHttpServer() {
         logger = LoggingUtils.getLogger();
-        this.plugin = plugin;
 
         String pdpath;
         String spath;
