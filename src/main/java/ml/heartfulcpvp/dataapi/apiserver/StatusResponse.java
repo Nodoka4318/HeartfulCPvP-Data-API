@@ -8,7 +8,7 @@ import ml.heartfulcpvp.dataapi.SrvStatus;
 public class StatusResponse {
     @SerializedName("tps")
     @Expose
-    private int tps;
+    private double tps;
 
     @SerializedName("dueling")
     @Expose

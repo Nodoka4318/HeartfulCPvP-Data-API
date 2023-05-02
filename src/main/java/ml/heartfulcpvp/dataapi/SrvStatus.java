@@ -1,17 +1,17 @@
 package ml.heartfulcpvp.dataapi;
 
+import ch.njol.skript.Skript;
+import ch.njol.skript.lang.ExpressionInfo;
 import ml.heartfulcpvp.dataapi.exceptions.InvalidConfigException;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.sql.Array;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.logging.Logger;
 
 public class SrvStatus {
-    private int tps;
+    private double tps;
     private boolean dueling;
     private int playerCount;
     private String[] onlinePlayers;
@@ -34,7 +34,7 @@ public class SrvStatus {
         playerCount = onlinePlayers.length;
     }
 
-    public int getTps() {
+    public double getTps() {
         return tps;
     }
 
@@ -51,17 +51,14 @@ public class SrvStatus {
     }
 
     private void setTps() {
-        tps = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Plugin.getInstatnce(), new Runnable() {
-            public static int TICK_COUNT = 0;
-            public static final long[] TICKS = new long[600];
-
-            @Override
-            public void run() {
-                TICKS[(TICK_COUNT % TICKS.length)] = System.currentTimeMillis();
-
-                TICK_COUNT += 1;
-            }
-        }, 100L, 1L);
+        try {
+            var method = Bukkit.getServer().getClass().getMethod("getTPS");
+            var tpss = (double[]) method.invoke(Bukkit.getServer());
+            tps = tpss[0];
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ex) {
+            tps = -1;
+            ex.printStackTrace();
+        }
     }
 
     private void setOnlinePlayers() {
@@ -85,6 +82,6 @@ public class SrvStatus {
             queuings = (long) skvar;
         }
 
-        dueling = queuings != 0l;
+        dueling = queuings >= 2l;
     }
 }
