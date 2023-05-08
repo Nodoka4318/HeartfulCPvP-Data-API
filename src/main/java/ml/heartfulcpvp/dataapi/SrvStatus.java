@@ -32,6 +32,7 @@ public class SrvStatus {
         setTps();
         setOnlinePlayers();
         playerCount = onlinePlayers.length;
+        setDueling();
     }
 
     public double getTps() {
